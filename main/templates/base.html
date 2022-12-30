@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load wishlist %}
+<head>
+
+	<title>Ecommerce Bootstrap Template</title>
+	<!-- Font Awesome -->
+
+	<link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free/css/all.min.css' %}" />
+	<!-- Bootstrap 4 CSS -->
+	<link rel="stylesheet" type="text/css" href="{% static 'bs4/bootstrap.min.css' %}" />
+	<!-- Main Jquery -->
+	<script type="text/javascript" src="{% static 'jquery.min.js' %}"></script>
+    <script src="{% static 'assets/js/popper.min.js'  %}"></script>
+    <script src="{% static 'assets/js/owl.carousel.min.js' %}"></script>
+	<!-- Bootstrap 4 JS -->
+	<script type="text/javascript" src="{% static 'bs4/bootstrap.min.js' %}"></script>
+	<!-- CustomJs -->
+    <link rel="manifest"  href="{% static 'assets/images/icons/site.html' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'custom.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/custom.css' %}" />
+	<script type="text/javascript" src="{% static 'custom.js' %}"></script>
+</head>
+<body>
+
+
+    <div class="page-wrapper">
+        <header class="header header-intro-clearance header-4">
+            <div class="header-top">
+                <div class="container1 ml-5">
+                    <div class="header-left">
+                        <a href="tel:#"><i class="icon-phone"></i>Call: +880 131312 1865</a>
+                    </div><!-- End .header-left -->
+
+                    <div class="header-right">
+                                <ul>
+                                    <li class="nav-item dropdown ">
+                                                <a class="nav-link text-black dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                  <i class="fa fa-user " ></i> My Account</a>
+                                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                {% if user.is_authenticated %}
+                                                <a class="dropdown-item bg-primary" href="{% url 'my_dashboard' %}">Dashboard</a>
+                                                <a class="dropdown-item bg-primary" href="{% url 'logout' %}">Logout</a>
+                                                {% else %}
+                                                <a class="dropdown-item bg-primary" href="{% url 'login' %}">Login</a>
+                                                <a class="dropdown-item bg-primary" href="{% url 'signup' %}">Signup</a>
+                                                {% endif %}
+                                            </div>
+                                    </li>
+                                </ul>
+
+                    </div><!-- End .header-right -->
+
+                </div><!-- End .container -->
+            </div><!-- End .header-top -->
+
+            <div class="header-middle">
+                <div class="container1">
+                            <div class="header-left">
+                                <button class="mobile-menu-toggler">
+                                    <span class="sr-only">Toggle mobile menu</span>
+                                    <i class="fa fa-heart"></i>
+                                </button>
+
+
+                                <a href="">
+                                    <img src="/media/cat_imgs/YYYY.jpg" alt="King's shop Logo" width="105" height="25">
+                                </a>
+                            </div><!-- End .header-left -->
+
+                            <div class="header-center">
+                                <div class="header-search header-search-extended header-search-visible d-none d-lg-block">
+                                    <a href="#" class="search-toggle" role="button"><i class="fa fa-search"></i></a>
+                                    <form action="" method="post">
+                                   {% csrf_token %}
+                                        <div class="header-search-wrapper search-wrapper-wide">
+                                            <label for="q" class="sr-only">Search</label>
+                                            <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+                                            <input type="search" class="form-control" name="search_product" id="q" placeholder="Search product ..." required>
+                                        </div><!-- End .header-search-wrapper -->
+                                    </form>
+                                </div><!-- End .header-search -->
+                            </div>
+
+
+
+
+                        <div class="dropdown cart-dropdown ">
+                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                <div class="icon">
+                                    <i class="fa fa-heart fa-red"></i>
+                              {% if request.user.is_authenticated %}
+                                    {% if request.user|wish_count %}
+                                        <span class="cart-count badge">{{request.user|wish_count}}</span>
+                                    {% else %}
+                                        <span class="cart-count badge">0</span>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+                                <p>Wishlist</p>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right dropdown-list ml-5">
+                                <div class="dropdown-cart-products">
+                                     {% if request.user.is_authenticated %}
+                                    {% if request.user|wish_list_view %}
+                                        {% for wish in request.user|wish_list_view %}
+
+                                    <div class="product">
+                                        <div class="product-cart-details">
+                                            <h4 class="product-title">
+                                                <a href="#">{{wish.product}}</a>
+                                            </h4>
+                                            <span class="cart-product-info">
+                                                <span class="cart-product-qty">TK-{{wish.product.productattribute_set.first.price}}</span>
+
+                                            </span>
+                                        </div><!-- End .product-cart-details -->
+
+                                        <figure class="product-image-container">
+                                            <a href="#" class="product-image">
+                                                <img src="/media/{{wish.product.productattribute_set.first.image}}" width="50" height="60" alt="product">
+                                            </a>
+                                        </figure>
+                                        <td><button class="btn-remove wish-remove" data-item="{{wish.product.id}}"><i class="fa fa-trash"></i></button></td>
+
+
+                                    </div><!-- End .product -->
+
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endif %}
+
+                                </div>
+                                <div class="dropdown-cart-action">
+                                       <a href="{% url 'my_wishlist' %}" class="btn btn-outline-primary-2"> View Wishlist <span class="cart-list "></span> <i class="fa fa-heart"></i></a>
+
+                                    </div><!-- End .dropdown-cart-total -->
+
+
+                                 </div>
+                             </div>
+
+
+
+                        <div class="dropdown cart-dropdown">
+                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                <div class="icon">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    {% if request.user.is_authenticated %}
+                                    {% if request.session.cartdata %}
+                                        <span class="cart-count">{{request.session.cartdata|length}}</span>
+                                    {% else %}
+                                        <span class="cart-count badge">0</span>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+                                <p>Cart</p>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right dropdown-list">
+                                <div class="dropdown-cart-products">
+                                    {% if request.user.is_authenticated %}
+                                        {% if request.session.cartdata %}
+                                            {% for product_id,item in request.session.cartdata.items %}
+
+                                    <div class="product ">
+                                        <div class="product-cart-details ">
+                                            <h4 class="product-title">
+                                                <a href="#">{{item.title}}</a><br>
+                                                 <a href="#">{{item.color}}</a>
+                                                 <a href="#">{{item.size}}</a>
+                                            </h4>
+
+                                            <span class="cart-product-info">
+                                                <span class="cart-product-qty">{{item.qty}}</span>
+                                            </span>
+
+                                            <span class="cart-product-info">
+                                                X <span class="cart-product-qty">{{item.price}}</span>
+
+                                            </span>
+                                        </div><!-- End .product-cart-details -->
+
+                                        <figure class="product-image-container">
+                                            <a href="#" class="product-image">
+                                               <img src="/media/{{item.image}}" width="50"  />
+                                            </a>
+                                        </figure>
+
+                                        <a href="#" class="delete-item" style="margin-left:50px" data-item="{{product_id}}" ><i class="fa fa-trash"></i></a>
+
+
+                                    </div><!-- End .product -->
+
+                                     {% endfor %}
+                                        {% endif %}
+                                        {% endif %}
+                                </div><!-- End .cart-product -->
+
+
+
+                                    <div class="dropdown-cart-action">
+                                       <a href="{% url 'cart' %}" class="btn btn-outline-primary-2"> Cart <span class="cart-list "></span> <i class="fa fa-shopping-cart"></i></a>
+                                        <a href="{% url 'checkout' %}" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                    </div><!-- End .dropdown-cart-total -->
+
+                            </div><!-- End .dropdown-menu -->
+                        </div><!-- End .cart-dropdown -->
+
+
+                    </div><!-- End .cart-dropdown -->
+                </div><!-- End .header-right -->
+
+            <div class="header-bottom sticky-header">
+                <div class="container">
+                    <div class="header-center">
+                        <nav class="main-nav">
+                            <ul class="menu sf-arrows text-black">
+                                        <li class="nav-item">
+                                            <a class="nav-link {% if request.path == '/home' %}active {% endif %}" href="/">Home</a>
+                                         </li>
+                                         <li class="nav-item ">
+                                            <a class="nav-link {% if request.path == '/about' %}active {% endif %} " href="#">About <span class="sr-only"></span></a>
+                                          </li>
+                                          <li class="nav-item">
+                                            <a href="{% url 'category-list' %}" class="nav-link {% if request.path == '/category-list' %}active {% endif %}">Categories</a>
+                                          </li>
+                                          <li class="nav-item">
+                                            <a class="nav-link {% if request.path == '/brand-list' %}active {% endif %} " href="{% url 'brand-list' %}">Brands</a>
+                                          </li>
+                                         <li class="nav-item ">
+                                            <a class="nav-link {% if request.path == '/blog' %}active {% endif %} " href="#"><span class="sr-only">Blog </span></a>
+                                          </li>
+                                         <li class="nav-item ">
+                                            <a class="nav-link {% if request.path == '/contact' %}active {% endif %}" href="#"> <span class="sr-only">Contact</span></a>
+                                        </li>
+                            </ul><!-- End .menu -->
+                        </nav><!-- End .main-nav -->
+                    </div><!-- End .header-center -->
+
+            </div><!-- End .container -->
+        </div><!-- End .header-bottom -->
+
+
+{% block content %}
+{% endblock %}
+
+
+
+    <footer class="pt-4 my-md-5 pt-md-5 border-top container bg-secondary">
+    <div class="row col-12">
+        <div class=" col-md text-white">
+        <a href="#">KING'S SHOP</a>
+        <small class="d-block mb-3 text-white">&copy; 2022-2023</small>
+        </div>
+        <div class="col-4 col-md text-white">
+        <h5>Features</h5>
+        <ul class="list-unstyled text-small">
+            <li><a class="text-white" href="#">Cool stuff</a></li>
+            <li><a class="text-white" href="#">Random feature</a></li>
+            <li><a class="text-white" href="#">Team feature</a></li>
+            <li><a class="text-white" href="#">Stuff for developers</a></li>
+            <li><a class="text-white" href="#">Another one</a></li>
+            <li><a class="text-white" href="#">Last time</a></li>
+        </ul>
+        </div>
+        <div class="col-4 col-md text-white">
+        <h5>Resources</h5>
+        <ul class="list-unstyled text-small">
+            <li><a class="text-white" href="#">Resource</a></li>
+            <li><a class="text-white" href="#">Resource name</a></li>
+            <li><a class="text-white" href="#">Another resource</a></li>
+            <li><a class="text-white" href="#">Final resource</a></li>
+        </ul>
+        </div>
+        <div class="col-4 col-md text-white">
+        <h5>About</h5>
+        <ul class="list-unstyled text-small">
+            <li><a class="text-white" href="#">Team</a></li>
+            <li><a class="text-white" href="#">Locations</a></li>
+            <li><a class="text-white" href="#">Privacy</a></li>
+            <li><a class="text-white" href="#">Terms</a></li>
+        </ul>
+        </div>
+    </div>
+    </footer>
+
+
+
+
+
+		<script type="text/javascript">
+		$(document).ready(function () {
+
+			let average = {{ avg_reviews.avg_rating }}
+			let	avg=parseInt(average)
+			let star = document.getElementById('star')
+			for(let i = 0; i < Math.round(avg); i++) {
+				document.getElementById("star_{{forloop.counter}}_" + (i+21) ).style.color='orange'
+			}
+		});
+	</script>
+
+<script type="text/javascript">
+		$(document).ready(function () {
+
+			let average = {{ avg_reviews.avg_rating }}
+			let	avg=parseInt(average)
+			let star = document.getElementById('star')
+			for(let i = 0; i < Math.round(avg); i++) {
+				document.getElementById("star_{{forloop.counter}}_" + (i+1) ).style.color='orange'
+			}
+		});
+	</script>
+
+
+<script>
+$('#feature-products .owl-carousel').owlCarousel({
+		loop: true,
+		autoplay: true,
+		autoplayTimeout: 4000,
+		autoplayHoverPause: true,
+		dots: true,
+		stagePadding: -5,
+		responsiveBaseElement: 'body',
+		responsive: {
+			0: {
+				items: 3,
+			},
+			700: {
+				items: 3,
+			},
+			1220: {
+				items: 3,
+			},
+		},
+	});
+
+    </script>
+
+
+
+             </header><!-- End .header -->
+        </div><!-- End .header-bottom -->
+    </body>
+</html>

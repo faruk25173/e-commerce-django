@@ -1,0 +1,291 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<main class="container my-4">
+	<!-- Featured Products -->
+	<h3 class="my-4 border-bottom pb-1">{{data.title}}</h3>
+	<div class="row">
+		<!-- Images -->
+		<div class="col-md-4">
+			{% for image in images %}
+			<img  data-zoom-image="/media/{{image.image}}" src="/media/{{image.image}}" class="card-img-top border product-imagem  imgm{{image.id}} zoom_01"  alt="{{data.title}}">
+			{% endfor %}
+			<div class="card  ">
+				<div class="card-body  review-list " style="max-height: 400px; overflow: auto;">
+					<div class="justify-content-center">
+						<div class="row mx-3">
+						<h6 class="mx-4 "> Average Review</h6>
+						<span class="fa fa-star " id="star_{{forloop.counter}}_21" ></span>
+						<span class="fa fa-star" id="star_{{forloop.counter}}_22" ></span>
+						<span class="fa fa-star" id="star_{{forloop.counter}}_23" ></span>
+						<span class="fa fa-star" id="star_{{forloop.counter}}_24" ></span>
+						<span class="fa fa-star" id="star_{{forloop.counter}}_25" ></span>
+					</div>
+						</div>
+				<div class="container">
+				{% for size in sizes %}
+				<img  src="/media/{{size.image}}" class="card-img-top border product-imgs product-images img{{size.color__id}}  img-fluid my-3 " data-ids="{{size.id}}" style="width:20%;height:auto" alt="{{data.title}}">
+				{% endfor %}
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+		<div class="col-md-8"><p>{{data.detail}}</p>
+			<hr/>
+			<table class="table table-bordered color-white ">
+                <tr class="col-1" >
+                    <th style="width:45%">Color </th>
+                    <th>
+               {% for color in colors %}
+
+                    <button class="btn  btn-outline-secondary btn-lg choose-color "  data-color="{{color.color__id}}"  data-colors="{{color.color__title}}" data-img="{{color.color__id}}" data-image-main="{{color.color__id}}" style="background-color: {{color.color__color_code}}; height:30px " value="{{color.color__title}}"></button>
+
+						{% endfor %}
+                    </th>
+                </tr>
+
+
+               		 <tr>
+                    <th >Size</th>
+                    <th >
+                       {% for size in sizes %}
+                		<button data-price="{{size.price}}" data-image="{{size.image}}" data-quantity="{{size.quantity}}" data-i="{{size.id}}" data-id="{{size.id}}" data-color="{{size.color__title}}" data-size="{{size.size__title}}"  class="btn btn-outline-secondary   choose-size  color{{size.color__id}}"  style="width:37px !important;height:27px; text-align: center !important;text-size:8px!important;
+  padding: 0;" value="{{size.size__title}}" >{{size.size__title}}</button>
+                        {% endfor %}
+                    </th>
+                	</tr>
+
+                    <tr>
+                    <th>Color Selected</th>
+                    <th><span class="product-color  product-color-{{data.id}}"  value="{{ data.productattribute_set.first.color }}">{{data.productattribute_set.first.color}}</span></th>
+					</tr>
+
+					<tr>
+                    <th>Size Selected</th>
+                    <th><span class="product-size  product-size-{{data.id}}"  value="{{ data.productattribute_set.first.size }}">{{data.productattribute_set.first.size}}</span></th>
+                	</tr>
+
+                 	<tr>
+                    <th>Price </th>
+                    <th>TK. <span class="product-price  product-price-{{data.id}}"  value="{{ data.productattribute_set.first.price }}">{{data.productattribute_set.first.price}}</span></th>
+                	</tr>
+
+
+                    <tr>
+                        <th>Stock</th>
+						<th> <span class="product-quantity product-quantity-{{data.id}}"  value="{{ data.productattribute_set.first.quantity }}">{{data.productattribute_set.first.quantity}}</span></th>
+                    </tr>
+                </table>
+            <hr/>
+			<div class="row mx-1 justify-content-center ">
+
+					<div class="input-group my-3" style="width:30%;">
+					  <input type="number" value="1" class="form-control product-qty-{{data.id}}" id="productQty" />
+					  <div class="input-group-append">
+
+
+						 <input type="hidden" class="product-title-{{data.id}}" value="{{data.title}}" />
+
+						<input type="hidden" class="product-id  product-id-{{data.id}}" value="{{ data.productattribute_set.first.id}}" />
+					<div class="clo-md-4  align-center">
+							<input type="hidden" class="product-image  product-image-{{data.id}}" value="{{ data.productattribute_set.first.image}}" />
+
+						  <button class="btn btn-primary btn-md add-to-cart  " data-index="{{data.id}}" type="button" id="addToCartBtn"><i class="fa fa-shopping-cart mx-2"></i> Add to Cart</button>
+			  	  		</div>
+
+
+				</div>
+			</div>
+						<div class="col-md-4 align-center">
+
+							 <button class="btn btn-primary btn-md my-3 mx-3  add-wishlist" data-product="{{data.id}}"  type="button"><i class="fa fa-heart"></i> Add to Wishlist</button>
+						</div>
+			</div>
+		</div>
+	</div>
+	<hr />
+	<div class="row">
+		<div class="col-md-6">
+			<h3 class="my-3">Detail</h3>
+			<!-- Detail -->
+			<table class="table table-bordered">
+				<tr>
+					<th>Brand</th>
+					<td><a href="/brand-product-list/{{data.brand.id}}">{{data.brand.title}}</a></td>
+				</tr>
+				<tr>
+					<th>Category</th>
+					<td><a href="/category-product-list/{{data.category.id}}">{{data.category.title}}</a></td>
+				</tr>
+				<tr>
+					<th>Specification</th>
+					<td>{{data.specs}}</td>
+				</tr>
+			</table>
+		</div>
+		<!-- Reviews -->
+		<div class="col-md-6">
+			<h4 class="my-3">Customer Reviews </h4>
+				{% if user.is_authenticated %}
+				{% if canAdd %}
+				<button data-toggle="modal" data-target="#productReview" type="button" class="btn btn-warning btn-sm float-right reviewBtn">Add Review</button>
+				{% endif %}
+				{% endif %}
+			</h4>
+	{% if user.is_authenticated %}
+	<!-- Product Review -->
+	<div class="modal fade" id="productReview" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">Add Product Review</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<form method="post" id="addForm" action="{% url 'save-review' data.id %}">
+	      		{% csrf_token %}
+		      	<table class="table table-bordered">
+		      		{{reviewForm.as_table}}
+		      		<tr>
+		      			<td colspan="2">
+		      				<button type="submit" class="btn btn-primary">Submit</button>
+		      				<input type="reset" class="btn btn-dark" value="Reset" id="reset" />
+		      			</td>
+		      		</tr>
+		      	</table>
+		      	<p class="ajaxRes"></p>
+	      </form>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- Product Review End -->
+	{% endif %}
+
+			<div class="card">
+				<div class="card-body review-list" style="max-height: 400px; overflow: auto;">
+					<!-- Detail -->
+					{% if reviews %}
+						{% for review in reviews %}
+						<blockquote class="blockquote text-right">
+						  <small>{{review.review_text}}</small>
+						  <footer class="blockquote-footer">{{review.user}}
+						  	<cite title="Source Title">
+						  		{% for star in review.review_rating|ljust:review.review_rating %}
+						  		<i class="fa fa-star text-warning"></i>
+								{% endfor %}
+						  	</cite>
+						  </footer>
+						</blockquote>
+						<hr />
+						{% endfor %}
+					{% else %}
+						<p class="no-data"> Review Product</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Related Products -->
+	<h3 class="mt-4 mb-3 border-bottom pb-1">Related Products</h3>
+<div class="card-body review-lists" style="max-height: 400px; overflow: auto;">
+	<div class="row">
+		{% for product in related_products %}
+		<div class="col-lg-3 col-sm-4 mb-4">
+			<div class="card shadow">
+			  <a href="/product/{{product.slug}}/{{product.id}}"><img src="/media/{{product.productattribute_set.first.image}}" class="card-img-top" alt="{{product.title}}"></a>
+			  <div class="card-body">
+			    <h6 class="card-text"><a href="/product/{{product.slug}}/{{product.id}}">{{product.title}}</a></h6>
+			  </div>
+			  <div class="col-12" >
+
+               <span class="fa fa-star" id="star_{{forloop.counter}}_1" ></span>
+                <span class="fa fa-star" id="star_{{forloop.counter}}_2" ></span>
+                <span class="fa fa-star" id="star_{{forloop.counter}}_3" ></span>
+               <span class="fa fa-star" id="star_{{forloop.counter}}_4" ></span>
+                <span class="fa fa-star" id="star_{{forloop.counter}}_5" ></span>
+            </div>
+
+				<script type="text/javascript">
+                $(document).ready(function () {
+
+                    let average = {{ product.get_avg_rating }}
+					let	avg=parseInt(average)
+                    let star = document.getElementById('star')
+                    for(let i = 0; i < Math.round(avg); i++) {
+                        document.getElementById("star_{{forloop.counter}}_" + (i+1) ).style.color='orange'
+                }
+            });
+            </script>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	</div>
+
+</main>
+<!-- Image Zoom -->
+</script>
+<script type="text/javascript">
+ $(document).ready(function(){
+
+
+ $("#addForm").submit(function(e){
+        $.ajax({
+            data:$(this).serialize(),
+            method:$(this).attr('method'),
+            url:$(this).attr('action'),
+            dataType:'json',
+            success:function(res){
+                if(res.bool==true){
+                    $(".ajaxRes").html('Data has been added.');
+                    $("#reset").trigger('click');
+                    // Hide Button
+                    $(".reviewBtn").hide();
+                    // End
+
+                    // create data for review
+                    var _html='<blockquote class="blockquote text-right">';
+                    _html+='<small>'+res.data.review_text+'</small>';
+                    _html+='<footer class="blockquote-footer">'+res.data.user;
+                    _html+='<cite title="Source Title">';
+                    for(var i=1; i<=res.data.review_rating; i++){
+                        _html+='<i class="fa fa-star text-warning"></i>';
+                    }
+                    _html+='</cite>';
+                    _html+='</footer>';
+                    _html+='</blockquote>';
+                    _html+='</hr>';
+
+                    $(".no-data").hide();
+
+                    // Prepend Data
+                    $(".review-list").prepend(_html);
+
+                    // Hide Modal
+                    $("#productReview").modal('hide');
+
+                    // AVg Rating
+                    $(".avg-rating").text(res.avg_reviews.avg_rating.toFixed(1))
+                }
+            }
+        });
+        e.preventDefault();
+    });
+
+</script>
+
+<script src="{% static 'jquery.ez-plus.js' %}"></script>
+<script type="text/javascript">
+    $('.zoom_01').ezPlus();
+
+</script>
+
+
+
+{% endblock %}

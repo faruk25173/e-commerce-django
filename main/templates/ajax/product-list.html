@@ -1,0 +1,76 @@
+{% load static %}
+
+
+{% for product in data %}
+
+<div class="card shadow  mb-1 mx-1 mt-3 ml-2" style="width:200px; height:350px" >
+
+            <a href="/product/{{product.slug}}/{{product.id}}"><img src="/media/{{product.productattribute_set.first.image}}" class="card-img-top mt-2 mb-2" style="width:70%; height:auto; align-item:center" alt="{{product.title}}"></a>
+
+            <div class="card-body  ml-1"  style="width:190px; height:80px">
+                <div class="product-cat">
+                    <a href="#">{{product.category}} </a>
+                </div>
+                <div class="product-title ">
+
+                    <h3 class="product-title "><a href="/product/{{product.slug}}/{{product.id}}">{{product.title}}</a></h3><!-- End .product-title -->
+
+                </div>
+                <div class="product-color ">
+                    <h7> <span class="product-color-{{product.id}}">{{product.productattribute_set.first.color}}</span> -<span class="product-size-{{product.id}}">{{product.productattribute_set.first.size}}</span></h7>
+                </div>
+                <div class="product-price ">
+                    <h7> TK <span class="product-price-{{product.id}}">{{product.productattribute_set.first.price}}</span>  Stock: <span class="product-quantity-{{product.id}}">{{product.productattribute_set.first.quantity}}</span></h7>
+
+                </div>
+            </div>
+
+
+             <div class="card-footer" style="width:200px;height:125px;background:black" >
+                         <input type="hidden" value="1" class="form-control product-qty-{{product.id}}" id="productQty" />
+
+                         <input type="hidden" class="product-title-{{product.id}}" value="{{product.title}}" />
+
+                        <input type="hidden" class="product-image-{{product.id}}" value="{{ product.productattribute_set.first.image}}" />
+
+                        <input type="hidden" class="product-id-{{product.id}}" value="{{ product.productattribute_set.first.id}}" />
+
+                        <div class ="row">
+                               <button class="btn btn-primary btn-sm add-to-cart ml-3" data-index="{{product.id}}" type="button" id="addToCartBtn"><i class="fa fa-shopping-cart mx-2"></i> Add to Cart</button>
+
+
+                                <button class="btn btn-primary btn-sm my-1 ml-3  add-wishlist" data-product="{{product.id}}"  type="button"><i class="fa fa-heart"></i> Add to Wishlist</button>
+
+                        </div>
+                        <div class="row" >
+                        <h7 class=" mt-1 ml-4 "> Avg. Rating:</h7>
+
+
+                        <span class="fa fa-star mt-2" id="star_{{forloop.counter}}_1" ></span>
+                        <span class="fa fa-star mt-2" id="star_{{forloop.counter}}_2" ></span>
+                        <span class="fa fa-star mt-2" id="star_{{forloop.counter}}_3" ></span>
+                        <span class="fa fa-star mt-2" id="star_{{forloop.counter}}_4" ></span>
+                        <span class="fa fa-star mt-2" id="star_{{forloop.counter}}_5" ></span>
+                        </div>
+
+
+
+                            <script type="text/javascript" src="{% static 'jquery.min.js' %}"></script>
+                            <script type="text/javascript">
+                            $(document).ready(function () {
+
+                                let average = {{ product.get_avg_rating }}
+                                let	avg=parseInt(average)
+                                let star = document.getElementById('star')
+                                for(let i = 0; i < Math.round(avg); i++) {
+                                    document.getElementById("star_{{forloop.counter}}_" + (i+1) ).style.color='orange'
+                                            }
+                                        });
+                             </script>
+             </div>
+
+    </div>
+
+{% endfor %}
+
+			

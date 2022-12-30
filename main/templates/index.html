@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Home Slider -->
+
+
+<div class="container" >
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    {% for banner in banners %}
+    {% if forloop.counter == 1 %}
+    <li data-target="#carouselExampleIndicators" data-slide-to="{{forloop.counter}}" class="active"></li>
+    {% else %}
+    <li data-target="#carouselExampleIndicators" data-slide-to="{{forloop.counter}}"></li>
+    {% endif %}
+    {% endfor %}
+  </ol>
+  <div class="carousel-inner" >
+    {% for banner in banners %}
+    {% if forloop.counter == 1 %}
+    <div class="carousel-item active">
+      {% else %}
+      <div class="carousel-item" >
+      {% endif %}
+      <img src="/media/{{banner.img}}" style="" class=""  alt="...">
+
+    </div>
+    {% endfor %}
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+</div>
+</div>
+
+    <div class="container">
+        <h3 class=" border-bottom "> Products</h3>
+    </div>
+
+    <main class="container ">
+                     <div class="row  bg-secondary ">
+                            <div class="col-md-3 mt-3 ">
+                                        <nav id="sidebar " >
+                                            <div class="text-white ">
+                                                <ul class="list-unstyled components  text-white ">
+                                                  <li class="active text-white ">
+                                                    <a href="/" class="text-dark"><span class="fa fa-home text-white "></span> Home</a>
+                                                  </li>
+                                                  <li>
+                                                      <a href="#" class="text-dark"><span class="fa fa-user text-white "></span> About</a>
+                                                  </li>
+                                                    <li>
+                                                  <a href="#" class="text-dark"><span class="fa fa-paper-plane text-white  "></span> Contacts</a>
+                                                  </li>
+                                                    <li>
+                                                  <a href="" class="text-dark"><span class="fa fa-suitcase text-white "></span> Blog</a>
+                                                  </li>
+
+                                                     <li>
+                                                  <a href= "/" class="text-dark"><span class="fa fa-briefcase text-white"></span> Products</a>
+                                                  </li>
+                                                  <li>
+                                                    <li>
+                                                  <a href="{% url 'category-list' %}" class="text-dark"><span class="fa fa-briefcase text-white "></span> Categories</a>
+                                                  </li>
+
+                                                  <li>
+                                                  <a href="{% url 'brand-list' %}" class="text-dark"><span class="fa fa-suitcase text-white "></span> Brands</a>
+                                                  </li>
+
+                                                    <li>
+                                                        <span class="fa fa-paper-plane text-white "></span>
+                                                  <a href="{% url 'product-list' %}" class="text-dark">Filters</a>
+                                                  </li>
+
+                                                </ul>
+                                            </div>
+                                        </nav>
+
+
+
+                                    <div class="card bg-dark mt-3">
+                                        <h6 class="card-header text-white ml-2">Categories</h6>
+                                        {% for cat in cats %}
+                                        <li class="list-group-item bg-light">
+                                            <a href="/category-product-list/{{cat.category__id}}" class="  text-info"><span class="fa fa-paper-plane text-dark mr-3">  </span>{{cat.category__title}}</a>
+                                        </li>
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="card bg-dark mt-3 mb-3" >
+                                        <h6 class="card-header text-white  ml-2">Brands</h6>
+                                        {% for brand in brands %}
+                                        <li class="list-group-item bg-light">
+                                            <a href="/brand-product-list/{{brand.brand__id}}" class="  text-info"><span class="fa fa-paper-plane text-dark mr-2"> </span>{{brand.brand__title}}</a>
+                                        </li>
+                                        {% endfor %}
+                                    </div>
+
+                         </div>
+
+                            <div class="col-md-9 ">
+                                  <div class="row ">
+                                        {% for product in data %}
+                                        <div class="card shadow  mb-1 mx-1 mt-3 ml-2" style="width:200px; height:350px">
+                                             {% if user.is_authenticated %}
+                                                <a href="/product/{{product.slug}}/{{product.id}}"><img src="/media/{{product.productattribute_set.first.image}}" class="card-img-top mt-2 mb-2"  style="width:70%; height:auto; align-item:center" alt="{{product.title}}"></a>
+                                             {% else %}
+                                                <a href="{% url 'login' %}"><img src="/media/{{product.productattribute_set.first.image}}" class="card-img-top mt-2 mb-2"  alt="{{product.title}}"></a>
+                                                      {% endif %}
+                                            <div class="card-body  ml-1"  style="width:190px; height:80px" >
+                                                <div class="product-cat">
+                                                    <a href="#">{{product.category}}</a>
+                                                </div>
+                                                <div class="product-title ">
+                                                     {% if user.is_authenticated %}
+                                                    <h3 class="product-title "><a href="/product/{{product.slug}}/{{product.id}}">{{product.title}}</a></h3><!-- End .product-title -->
+                                                     {% else %}
+                                                    <h3 class="product-title "><a href="{% url 'login' %}">{{product.title}}</a></h3><!-- End .product-title -->
+                                                      {% endif %}
+
+                                                </div>
+                                                <div class="product-color ">
+                                                    <h7> <span class="product-color-{{product.id}}">{{product.productattribute_set.first.color}}</span> -<span class="product-size-{{product.id}}">{{product.productattribute_set.first.size}}</span></h7>
+                                                </div>
+                                                <div class="product-price ">
+                                                    <h7> TK <span class="product-price-{{product.id}}">{{product.productattribute_set.first.price}}</span>  Stock: <span class="product-quantity-{{product.id}}">{{product.productattribute_set.first.quantity}}</span></h7>
+
+                                                </div>
+                                                 </div>
+
+
+                                                         <div class="card-footer mr-1" style="width:200px;height:125px;background:black" >
+                                                             <input type="hidden" value="1" class="form-control product-qty-{{product.id}}" id="productQty" />
+
+                                                             <input type="hidden" class="product-title-{{product.id}}" value="{{product.title}}" />
+
+                                                            <input type="hidden" class="product-image-{{product.id}}" value="{{ product.productattribute_set.first.image}}" />
+
+                                                            <input type="hidden" class="product-id-{{product.id}}" value="{{ product.productattribute_set.first.id}}" />
+
+                                                            <div class ="row">
+
+                                                                {% if user.is_authenticated %}
+                                                                       <button class="btn btn-primary btn-sm add-to-cart ml-3" data-index="{{product.id}}" type="button" id="addToCartBtn"><i class="fa fa-shopping-cart mx-2"></i> Add to Cart</button>
+                                                                        {% else %}
+                                                                          <a href="{% url 'login' %}"><button class="btn btn-sm btn-danger disabled my-1 ml-3" style="width:30px;height-20px"><i class="fa fa-shopping-cart"> </i></button></a>
+                                                                          {% endif %}
+                                                                        {% if user.is_authenticated %}
+                                                                        <button class="btn btn-primary btn-sm my-1 ml-3  add-wishlist" data-product="{{product.id}}"  type="button"><i class="fa fa-heart"></i> Add to Wishlist</button>
+                                                                          {% else %}
+                                                                          <a href="{% url 'login' %}"><button class="btn btn-sm btn-danger disabled my-1 ml-3" style="width:30px;height-20px"><i class="fa fa-heart fa-red"> </i></button></a>
+                                                                          {% endif %}
+
+                                                            </div>
+                                                            <div class="row" >
+                                                            <h7 class=" mt-1 ml-4 "> Avg. Rating:</h7>
+
+
+                                                            <span class="fa fa-star mt-2" id="star_{{forloop.counter}}_11" ></span>
+                                                            <span class="fa fa-star mt-2" id="star_{{forloop.counter}}_12" ></span>
+                                                            <span class="fa fa-star mt-2" id="star_{{forloop.counter}}_13" ></span>
+                                                            <span class="fa fa-star mt-2" id="star_{{forloop.counter}}_14" ></span>
+                                                            <span class="fa fa-star mt-2" id="star_{{forloop.counter}}_15" ></span>
+                                                            </div>
+
+
+
+                                                            <script type="text/javascript" src="{% static 'jquery.min.js' %}"></script>
+                                                            <script type="text/javascript">
+                                                            $(document).ready(function () {
+
+                                                                let average = {{ product.get_avg_rating }}
+                                                                let	avg=parseInt(average)
+                                                                let star = document.getElementById('star')
+                                                                for(let i = 0; i < Math.round(avg); i++) {
+                                                                    document.getElementById("star_{{forloop.counter}}_" + (i+11) ).style.color='orange'
+                                                                            }
+                                                                        });
+                                                             </script>
+                                                        </div>
+
+                                                </div>
+				                         {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+ <section id="d">
+
+            <div class="container new-arrivals">
+                                    <div class="heading heading-flex mb-4">
+                                        <div class="heading-left">
+                                            <h2 class="title">Popular Products</h2>
+                                        </div>
+                                    </div>
+                                    <div class=" col-12">
+                                        <div class=" row">
+                                            <div class="tab-content tab-content-carousel just-action-icons-sm">
+                                                <div class="tab-pane p-0 fade show active" id="new-all-tab4" role="tabpanel" aria-labelledby="new-all-link">
+                                                    <div class="owl-carousel owl-full carousel-equal-height carousel-with-shadow" data-toggle="owl">
+                                                        {% for product in data %}
+
+                                                    <div class="product product-2" style="margin-left:15px ;">
+                                                        <figure class="product-media" style="background: white;">
+                                                            <span class="product-label label-circle label-top">Top</span>
+                                                            <a href="/product/{{product.id}}">
+                                                                <img src="/media/{{product.productattribute_set.first.image}}" alt="Product image" class="img-fluid" style="width: 175px; height: 195px;">
+                                                            </a>
+                                                            <div class="product-action-horizontal">
+                                                                <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"></a>
+                                                            </div><!-- End .product-action -->
+                                                            <div class="product-action">
+                                                                <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
+                                                            </div><!-- End .product-action -->
+                                                        </figure><!-- End .product-media -->
+                                                            <div class="product-body">
+                                                                <div class="product-cat">
+                                                                    <a href="#">{{product.category}}</a>
+                                                                </div><!-- End .product-cat -->
+                                                                <h3 class="product-title"><a href="/product/{{product.id}}">{{product.title}}</a></h3><!-- End .product-title -->
+                                                                <div class="product-price">
+                                                                    ${{product.productattribute_set.first.price}}
+                                                                </div>
+                                                                <div class="ratings-container">
+                                                                    <div class="card-footer">
+                                                                <span class="fa fa-star" id="star_{{forloop.counter}}_41" ></span>
+                                                                <span class="fa fa-star" id="star_{{forloop.counter}}_42" ></span>
+                                                                <span class="fa fa-star" id="star_{{forloop.counter}}_43" ></span>
+                                                                <span class="fa fa-star" id="star_{{forloop.counter}}_44" ></span>
+                                                                <span class="fa fa-star" id="star_{{forloop.counter}}_45" ></span>
+                                                                </div>
+                                                                 <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+                                                                </div>
+                                                                    </div>
+                                                    </div>
+
+                                        {% endfor %}
+                                        </div>
+                                </div>
+
+                            </div>
+                        </div>
+                </div>
+                 </div>
+        </section>
+
+ </main>
+
+
+{% endblock %}
